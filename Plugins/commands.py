@@ -96,9 +96,7 @@ async def about(bot, cmd):
 
 @autocaption.on_message(filters.command("set_caption") & filters.private)
 async def set_caption(bot, cmd):
-    if Config.ADMIN_ID != cmd.from_user.id:
-        return
-
+    
     if len(cmd.command) == 1:
         await cmd.reply_text(
             "🖊️ 𝐒𝐄𝐓 𝐂𝐀𝐏𝐓𝐈𝐎𝐍 \n\nUse this command to set your own caption text \n\n👉 `set_caption My Caption`", 
@@ -106,10 +104,33 @@ async def set_caption(bot, cmd):
         )
     else:
         command, caption = cmd.text.split(' ', 1)
-        await update_caption(cmd.from_user.id, caption)
+        await addcaption(int(message.chat.id), caption)
         await cmd.reply_text(f"**--Your Caption--:**\n\n{caption}", quote=True)
 
-
+@Client.on_message(filters.private & filters.command('del_caption'))
+async def delete_caption(client, message): 
+    caption = find(int(message.chat.id))
+    if not caption:
+        await message.reply_text("**You dont have any custom caption**")
+           #reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("<< Back", callback_data="settings_data"),InlineKeyboardButton("Close", callback_data="cancel")]])
+        #)
+        return
+    delcaption(int(message.chat.id))
+    await message.reply_text("**Your caption successfully deleted ✅**")
+       #reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("<< Back", callback_data="settings_data"),InlineKeyboardButton("Close", callback_data="cancel")]])
+    #)
+                                       
+@Client.on_message(filters.private & filters.command('see_caption'))
+async def see_caption(client, message): 
+    caption = find(int(message.chat.id))
+    if caption:
+       await message.reply_text(f"<b><u>Your Caption:</b></u>\n\n`{caption}`")
+          #reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("<< Back", callback_data="settings_data"),InlineKeyboardButton("Close", callback_data="cancel")]])
+       #)
+    else:
+       await message.reply_text("**You dont have any custom caption**")
+          #reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("<< Back", callback_data="settings_data"),InlineKeyboardButton("Close", callback_data="cancel")]])
+       #)
 
 
 # call_backs 
@@ -192,10 +213,10 @@ async def button(bot, cmd: CallbackQuery):
                ) 
           )
     elif "status_data" in cb_data:
-          if Config.ADMIN_ID == int(cmd.message.chat.id):
+          if Not in Config.BANNED_USERS == int(cmd.message.chat.id):
              try:
-                caption = await get_caption(cmd.from_user.id)
-                caption_text = caption.caption
+                caption = await find(int(cmd.chat.id))
+                caption_text = caption
              except:
                 caption_text = "Not Added" 
              await cmd.message.edit(
