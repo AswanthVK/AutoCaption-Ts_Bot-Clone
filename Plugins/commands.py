@@ -235,19 +235,4 @@ async def button(bot, cmd: CallbackQuery):
                       ] 
                   ) 
              )
-          else:
-             await cmd.message.edit(
-                  text=Translation.NOT_ADMIN_TEXT,
-                  parse_mode="html", 
-                  disable_web_page_preview=True, 
-                  reply_markup=InlineKeyboardMarkup(
-                      [
-                          [
-                           InlineKeyboardButton("⬇️ BACK", callback_data="back_data"),
-                           InlineKeyboardButton("🔐 CLOSE", callback_data="close_data")
-                          ]
- 
-                      ] 
-                  ) 
-             )
- 
+          
