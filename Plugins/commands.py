@@ -213,7 +213,7 @@ async def button(bot, cmd: CallbackQuery):
                ) 
           )
     elif "status_data" in cb_data:
-          if Not in Config.BANNED_USERS == int(cmd.message.chat.id):
+          if not in Config.BANNED_USERS == int(cmd.message.chat.id):
              try:
                 caption = await find(int(cmd.chat.id))
                 caption_text = caption
