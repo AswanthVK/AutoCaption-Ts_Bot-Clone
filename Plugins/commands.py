@@ -104,7 +104,7 @@ async def set_caption(bot, cmd):
         )
     else:
         command, caption = cmd.text.split(' ', 1)
-        await addcaption(int(message.chat.id), caption)
+        await addcaption(int(cmd.chat.id), caption)
         await cmd.reply_text(f"**--Your Caption--:**\n\n{caption}", quote=True)
 
 @autocaption.on_message(filters.private & filters.command('del_caption'))
