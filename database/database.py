@@ -1,63 +1,41 @@
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, scoped_session
-
+import pymongo 
 import os
 
-import threading
-import asyncio
+DB_NAME = os.environ.get("DB_NAME","New-CaptionBot")
+DB_URL = os.environ.get("DB_URL","mongodb+srv://aswanthvk:aswanthvk@cluster0.ul7sp2m.mongodb.net/?retryWrites=true&w=majority")
+mongo = pymongo.MongoClient(DB_URL)
+db = mongo[DB_NAME]
+dbcol = db["user"]
 
-from sqlalchemy import Column, Integer, Boolean, String, ForeignKey, UniqueConstraint, func
+def insert(chat_id):
+            user_id = int(chat_id)
+            user_det = {"_id":user_id,"caption":None , "date":0}
+            try:
+            	dbcol.insert_one(user_det)
+            except:
+            	value = 'new'
+            	return value
+            	pass
 
+def addcaption(chat_id, caption):
+       dbcol.update_one({"_id": chat_id},{"$set":{"caption": caption}})
+	
+def delcaption(chat_id): 
+        dbcol.update_one({"_id": chat_id},{"$set":{"caption":None}})
+	
+def find(chat_id):
+	id =  {"_id":chat_id}
+	x = dbcol.find(id)
+	for i in x:
+             caption = i["caption"]
+             return caption
 
-from config import Config
-
-
-def start() -> scoped_session:
-    engine = create_engine(Config.DB_URL, client_encoding="utf8")
-    BASE.metadata.bind = engine
-    BASE.metadata.create_all(engine)
-    return scoped_session(sessionmaker(bind=engine, autoflush=False))
-
-
-BASE = declarative_base()
-SESSION = start()
-
-INSERTION_LOCK = threading.RLock()
-
-class custom_caption(BASE):
-    __tablename__ = "caption"
-    id = Column(Integer, primary_key=True)
-    caption = Column(String)
+def getid():
+    values = []
+    for key  in dbcol.find():
+         id = key["_id"]
+         values.append((id)) 
+    return values
     
-    def __init__(self, id, caption):
-        self.id = id
-        self.caption = caption
-
-custom_caption.__table__.create(checkfirst=True)
-
-async def update_caption(id, caption):
-    with INSERTION_LOCK:
-        cap = SESSION.query(custom_caption).get(id)
-        if not cap:
-            cap = custom_caption(id, caption)
-            SESSION.add(cap)
-            SESSION.flush()
-        else:
-            SESSION.delete(cap)
-            cap = custom_caption(id, caption)
-            SESSION.add(cap)
-        SESSION.commit()
-
-async def del_caption(id):
-    with INSERTION_LOCK:
-        msg = SESSION.query(custom_caption).get(id)
-        SESSION.delete(msg)
-        SESSION.commit()
-
-async def get_caption(id):
-    try:
-        caption = SESSION.query(custom_caption).get(id)
-        return caption
-    finally:
-        SESSION.close()
+def find_one(id):
+	return dbcol.find_one({"_id":id})
