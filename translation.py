@@ -7,10 +7,6 @@ class Translation(object):
 
 I am a simple auto caption bot
 I can automatically add pre-setted caption to the files in channels
-
-I am currently working for a channel if you want to use me, Use my source code and Deploy me
-
-⚜️ Maintained By 👉 @{}
 """    
 
       HELP_TEXT = """
@@ -26,9 +22,9 @@ I am currently working for a channel if you want to use me, Use my source code a
    
 <i>(Support Markdown)</i>
 
-👉 Forward your files in your channel and I will edit it
+👉 Forward your files to your channel and I will edit it
 
-<b><a href="https://t.me/Ts_bots">©️ ᴛʀᴀᴄᴋsᴛᴜᴅɪᴏ's ʙᴏᴛs</a></b>
+<b><a href="https://t.me/NewBotz">©️ NewBotz</a></b>
 """    
               
 
