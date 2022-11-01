@@ -17,9 +17,9 @@ caption_position = usercaption_position.lower()
 
 @autocaption.on_message(filters.channel & (filters.document | filters.video | filters.audio ) & ~filters.edited, group=-1)
 async def editing(bot, message):
-      caption_text = await get_caption(Config.ADMIN_ID)
+      caption_text = await find(int(message.chat.id))
       try:
-         caption_text = caption_text.caption
+         caption_text = caption_text
       except:
          caption_text = ""
          pass 
