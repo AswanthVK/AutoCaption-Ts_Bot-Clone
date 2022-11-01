@@ -10,3 +10,4 @@ class Config(object):
       ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME", "AswanthVK")
       ADMIN_ID = int(os.environ.get("ADMIN_ID", "662933911")) 
       DB_URL = os.environ.get("DATABASE_URL", "")
+      BANNED_USERS = []
