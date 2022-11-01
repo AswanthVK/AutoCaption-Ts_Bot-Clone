@@ -107,7 +107,7 @@ async def set_caption(bot, cmd):
         await addcaption(int(message.chat.id), caption)
         await cmd.reply_text(f"**--Your Caption--:**\n\n{caption}", quote=True)
 
-@Client.on_message(filters.private & filters.command('del_caption'))
+@autocaption.on_message(filters.private & filters.command('del_caption'))
 async def delete_caption(client, message): 
     caption = find(int(message.chat.id))
     if not caption:
@@ -120,7 +120,7 @@ async def delete_caption(client, message):
        #reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("<< Back", callback_data="settings_data"),InlineKeyboardButton("Close", callback_data="cancel")]])
     #)
                                        
-@Client.on_message(filters.private & filters.command('see_caption'))
+@autocaption.on_message(filters.private & filters.command('see_caption'))
 async def see_caption(client, message): 
     caption = find(int(message.chat.id))
     if caption:
